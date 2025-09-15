@@ -86,4 +86,47 @@ const deleteCarros = (req, res) => {
         message: `O carro ${id} foi DELETADO com sucesso!`
     })
 }
-export { getAllCarros, getCarrosById, createCarros, deleteCarros }
+
+const updateCarros = (req, res) => {
+    const id = parseInt(req.params.id);
+    const { nome, modelo, ano, cor, qtdeVitorias, velocidadeMaxima, equipe } = req.body;
+
+    const idParaEditar = id;
+
+    if(isNaN(idParaEditar)){
+        return res.status(400).json({
+            success: false,
+            message: "O id do carro deve ser válido!"
+        })
+    }
+
+    const carrosExiste = carros.find(carro => carro.id === idParaEditar)
+    if(!carrosExiste){
+        return res.status(404).json({
+            success: false,
+            message: `O carro com o id ${id} não existe!`
+        })
+    }
+
+    const carrosAtualizados = carros.map(carro => carro.id === idParaEditar ?{
+        ...carro,
+        ...(nome && {nome}),
+        ...(modelo && {modelo}),
+        ...(ano && {ano: parseInt(ano)}),
+        ...(cor && {cor}),
+        ...(qtdeVitorias && {qtdeVitoria: parseInt(qtdeVitorias)}),
+        ...(velocidadeMaxima && {velocidadeMaxima: parseInt(velocidadeMaxima)}),
+        ...(equipe && {equipe}),
+    }
+        :carro
+    );
+
+    carros.splice(0, carros.length, ...carrosAtualizados);
+
+    res.status(200).json({
+        success: true,
+        message:"Dados atualizados com sucesso!",
+        carro: carrosAtualizados
+    })
+}
+export { getAllCarros, getCarrosById, createCarros, deleteCarros, updateCarros }
