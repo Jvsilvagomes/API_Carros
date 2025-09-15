@@ -10,5 +10,22 @@ const getAllCarros = (req, res) => {
     });
 }
 
+const getCarrosById = (req, res) => {
+    const id = parseInt(req.params.id);
 
-export {getAllCarros}
+    const carro = carros.find(c => c.id === parseInt(id));
+
+    if(!carro){
+        res.status(404).json({
+            success: false,
+            message: "Carro não existe"
+        })
+    }
+
+    res.status(200).json({
+        total: resultado.length,
+        carro: carro
+    })
+}
+
+export { getAllCarros, getCarrosById }
