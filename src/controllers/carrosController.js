@@ -58,4 +58,32 @@ const createCarros = (req, res) => {
     })
 }
 
-export { getAllCarros, getCarrosById, createCarros }
+const deleteCarros = (req, res) => {
+    const id = parseInt(req.params.id);
+
+    if( isNaN(id)){
+        return req.status(400).json({
+            success: false, 
+            message: "O id deve ser válido!!"
+        })
+    }
+
+    const carroRemovido = carros.find(b => b.id === id);
+
+    if(!carroRemovido){
+        return res.status(404).json({
+            success: false,
+            message: `Carro com o id ${id} não encontrado!`
+        })
+    }
+
+    const carrosFiltrados = carros.filter(carro => carros.id !== id);
+    
+    carros.splice(0, carros.length, ...carrosFiltrados)
+
+    res.status(200).json({
+        success: false,
+        message: `O carro ${id} foi DELETADO com sucesso!`
+    })
+}
+export { getAllCarros, getCarrosById, createCarros, deleteCarros }
