@@ -28,4 +28,34 @@ const getCarrosById = (req, res) => {
     })
 }
 
-export { getAllCarros, getCarrosById }
+const createCarros = (req, res) => {
+    const { nome, modelo, ano, cor, qtdeVitorias, velocidadeMaxima, equipe } = req.body
+
+    if(!nome || !modelo || !ano || !cor){
+        return res.status(400).json({
+            success: false,
+            message: "Nome modelo ano e cor são obrigatórios"
+        })
+    }
+
+    const novoCarro = {
+        id: carros.length + 1,
+        nome: nome,
+        modelo: modelo,
+        ano: parseInt(ano),
+        cor: cor,
+        qtdeVitorias: parseInt(qtdeVitorias),
+        velocidadeMaxima: parseInt(velocidadeMaxima),
+        equipe: equipe
+    }
+
+    carros.push(novoCarro);
+
+    res.status(201).json({
+        success: true,
+        message: "Novo carro criado com sucesso!",
+        carro: novoCarro
+    })
+}
+
+export { getAllCarros, getCarrosById, createCarros }
