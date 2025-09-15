@@ -3,13 +3,6 @@ import dados from "../models/dados.js";
 const { carros } = dados;
 let resultado = carros;
 
-const getAllCarros = (req, res) => {
-    res.status(200).json({
-        total: resultado.length,
-        barbies: resultado
-    });
-}
-
 const getCarrosById = (req, res) => {
     const id = parseInt(req.params.id);
 
@@ -129,4 +122,44 @@ const updateCarros = (req, res) => {
         carro: carrosAtualizados
     })
 }
-export { getAllCarros, getCarrosById, createCarros, deleteCarros, updateCarros }
+
+const getFilterCarro = (req, res) => {
+
+    const { nome, modelo, ano, cor, qtdeVitorias, velocidadeMaxima, equipe,  } = req.query
+    let resultado = carros;
+
+    if(nome){
+        resultado = resultado.filter(c => c.nome.toLowerCase() === nome.toLowerCase());
+    }
+
+    if(modelo){
+        resultado = resultado.filter(c => c.modelo.toLowerCase() === modelo.toLowerCase());
+    }
+
+    if(ano){
+        resultado = resultado.filter(c => c.ano == ano);
+    }
+
+    if(cor){
+        resultado = resultado.filter(c => c.cor.toLowerCase().includes(cor.toLowerCase()));
+    } 
+
+    if(qtdeVitorias){
+        resultado = resultado.filter(c => c.qtdeVitorias.toLowerCase().includes(qtdeVitorias.toLowerCase()));
+    }
+
+    if(velocidadeMaxima){
+        resultado = resultado.filter(c => c.velocidadeMaxima.toLowerCase().includes(velocidadeMaxima.toLowerCase()));
+    }
+
+    if(equipe){
+        resultado = resultado.filter(c => c.equipe.toLowerCase() === equipe.toLowerCase());
+    }
+     
+    res.status(200).json({
+        total: resultado.length,
+        data: resultado
+    })
+}
+
+export { getCarrosById, createCarros, deleteCarros, updateCarros, getFilterCarro }

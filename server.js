@@ -9,7 +9,7 @@ dotenv.config();
 const serverPort = process.env.PORT || 3001;
 
 app.get("/", (req, res) => {
-    res.send("🚀 Servidor funcionando...");
+    res.send("Ka-chow");
 });
 
 app.use("/carros", carrosRoutes);
